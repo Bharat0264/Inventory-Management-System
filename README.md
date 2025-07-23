@@ -101,6 +101,30 @@ docker run -p 5000:5000 inventory-system
 
 ---
 
+## 🖼️ Screenshots
+
+<div align="center">
+
+### 📊 Dashboard Overview
+![Dashboard](Dashboard.png)
+*Main dashboard with KPI cards and file upload interface*
+
+### 📦 Inventory Management
+![Inventory](Inventory.png)
+*Inventory tracking with low stock alerts and expiry monitoring*
+
+### 📈 Sales Analytics
+![Analytics](Analytics.png)
+*Comprehensive sales analytics and trend analysis*
+
+### 🧠 AI Predictions
+![Predictions](Prediction.png)
+*AI-powered sales predictions with model status*
+
+</div>
+
+---
+
 ## 🛠️ What's Inside
 
 ```
