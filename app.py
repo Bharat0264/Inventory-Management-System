@@ -1,17 +1,13 @@
 import os
 import pickle
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from flask import Flask, request, render_template, jsonify
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 
-from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, PLOT_DIR, STATIC_DIR
+from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, STATIC_DIR
 from utils import generate_inventory_report, get_low_stock_products, get_near_expiry_products
 
 # Short header label and full product name (override with APP_NAME / APP_FULL_NAME).
@@ -215,7 +211,11 @@ def predict():
             }), 500
 
     elif request.method == "GET":
-        return page("prediction.html", nav_active="predict")
+        return page(
+            "prediction.html",
+            nav_active="predict",
+            model_loaded=model is not None,
+        )
 
 @app.route('/analytics')
 def sales_analytics():
@@ -260,25 +260,7 @@ def sales_analytics():
                 'total_revenue': float(row['total_revenue'])
             })
 
-        # Create sales trend plot
-        try:
-            fig, ax = plt.subplots(figsize=(12, 6))
-            ax.plot(range(len(data)), data['total_revenue'], marker='o', linestyle='-', linewidth=2, markersize=4)
-            ax.set_title('Revenue Trend by Product', fontsize=16, fontweight='bold')
-            ax.set_xlabel('Product Index', fontsize=12)
-            ax.set_ylabel('Total Revenue', fontsize=12)
-            ax.grid(True, alpha=0.3)
-            ax.set_facecolor('#f8f9fa')
-            fig.patch.set_facecolor('white')
-            fig.tight_layout()
-
-            # Save chart to writable runtime dir (serverless has no persistent project disk)
-            sales_trend_file_path = os.path.join(PLOT_DIR, "sales_trend.png")
-            fig.savefig(sales_trend_file_path, dpi=300, bbox_inches="tight", facecolor="white")
-            plt.close()
-        except Exception as e:
-            print(f"Error creating sales trend plot: {e}")
-
+        row_count = int(len(data))
         chart_labels = [str(x) for x in data["product_id"].tolist()]
         chart_revenue = [float(x) for x in data["total_revenue"].tolist()]
 
@@ -287,6 +269,7 @@ def sales_analytics():
             nav_active="analytics",
             total_sales=total_sales,
             average_order_value=average_order_value,
+            row_count=row_count,
             top_selling_products=top_selling_dict,
             bottom_selling_products=bottom_selling_dict,
             chart_labels=chart_labels,

@@ -1,5 +1,5 @@
 /**
- * IMS — Inventory Management System — upload, dashboard KPIs, forecast, train.
+ * IMS: Inventory Management System (upload, KPIs, forecast, train).
  */
 
 class InventoryApp {
@@ -9,20 +9,26 @@ class InventoryApp {
     this.fileInput = document.getElementById("fileInput");
     this.dropzone = document.querySelector(".dropzone");
     this.trainBtn = document.getElementById("trainModelBtn");
-    this.homeTrainBtn = document.getElementById("homeTrainBtn");
+    this.uploadSubmitBtn = document.getElementById("uploadSubmitBtn");
+    this.refreshKpisBtn = document.getElementById("refreshKpis");
     this.modelStatus = document.getElementById("modelStatus");
 
     this.bindUpload();
     this.bindPrediction();
     this.bindTrain();
     this.bindDropzone();
+    this.bindRefresh();
 
     if (document.getElementById("totalProducts")) {
       this.loadDashboardData();
     }
+  }
 
-    if (this.modelStatus && window.location.pathname === "/predict") {
-      this.initModelStatus();
+  bindRefresh() {
+    if (this.refreshKpisBtn) {
+      this.refreshKpisBtn.addEventListener("click", () => {
+        this.loadDashboardData(true);
+      });
     }
   }
 
@@ -74,14 +80,7 @@ class InventoryApp {
   }
 
   bindTrain() {
-    const run = () => this.runTrain();
-    if (this.trainBtn) this.trainBtn.addEventListener("click", run);
-    if (this.homeTrainBtn) this.homeTrainBtn.addEventListener("click", run);
-  }
-
-  initModelStatus() {
-    if (this.trainBtn) this.trainBtn.disabled = false;
-    if (this.modelStatus) this.modelStatus.textContent = "Train or run a prediction.";
+    if (this.trainBtn) this.trainBtn.addEventListener("click", () => this.runTrain());
   }
 
   showFilePreview(file) {
@@ -97,6 +96,12 @@ class InventoryApp {
     return `${(bytes / Math.pow(k, i)).toFixed(1)} ${["B", "KB", "MB", "GB"][i]}`;
   }
 
+  setUploading(loading) {
+    if (!this.uploadSubmitBtn) return;
+    this.uploadSubmitBtn.disabled = loading;
+    this.uploadSubmitBtn.textContent = loading ? "Uploading…" : "Upload";
+  }
+
   async handleUpload() {
     if (!this.fileInput || !this.fileInput.files.length) {
       this.notify("Choose a CSV file.", "error");
@@ -104,6 +109,7 @@ class InventoryApp {
     }
     const fd = new FormData();
     fd.append("file", this.fileInput.files[0]);
+    this.setUploading(true);
     try {
       const res = await fetch("/upload", { method: "POST", body: fd });
       const data = await res.json();
@@ -119,10 +125,12 @@ class InventoryApp {
     } catch (err) {
       console.error(err);
       this.notify("Network error.", "error");
+    } finally {
+      this.setUploading(false);
     }
   }
 
-  async handlePrediction() {
+  handlePrediction() {
     const q1 = parseFloat(document.getElementById("quantity1")?.value);
     const q2 = parseFloat(document.getElementById("quantity2")?.value);
     const q3 = parseFloat(document.getElementById("quantity3")?.value);
@@ -131,41 +139,41 @@ class InventoryApp {
       return;
     }
     if (q1 < 0 || q2 < 0 || q3 < 0) {
-      this.notify("Values must be ≥ 0.", "error");
+      this.notify("Values must be at least 0.", "error");
       return;
     }
-    try {
-      const res = await fetch("/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity1: q1, quantity2: q2, quantity3: q3 }),
-      });
-      const data = await res.json();
-      const box = document.getElementById("predictionResult");
-      const val = document.getElementById("predictionValue");
-      if (!data.success) {
-        this.notify(data.error || "Prediction failed.", "error");
-        return;
+    const run = async () => {
+      try {
+        const res = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity1: q1, quantity2: q2, quantity3: q3 }),
+        });
+        const data = await res.json();
+        const box = document.getElementById("predictionResult");
+        const val = document.getElementById("predictionValue");
+        if (!data.success) {
+          this.notify(data.error || "Prediction failed.", "error");
+          return;
+        }
+        let t = `Next level (estimate): ${Number(data.prediction).toFixed(2)}`;
+        if (data.method) t += ` (${data.method})`;
+        if (val) val.textContent = t;
+        if (box) {
+          box.hidden = false;
+          box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        this.notify("Done.", "success");
+      } catch (err) {
+        console.error(err);
+        this.notify("Network error.", "error");
       }
-      let line = `Next level (estimate): <strong>${Number(data.prediction).toFixed(2)}</strong>`;
-      if (data.method) line += ` <span class="muted">(${data.method})</span>`;
-      if (val) val.innerHTML = line;
-      if (box) {
-        box.hidden = false;
-        box.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
-      this.notify("Done.", "success");
-    } catch (err) {
-      console.error(err);
-      this.notify("Network error.", "error");
-    }
+    };
+    run();
   }
 
   async runTrain() {
-    if (this.trainBtn) {
-      this.trainBtn.disabled = true;
-    }
-    if (this.homeTrainBtn) this.homeTrainBtn.disabled = true;
+    if (this.trainBtn) this.trainBtn.disabled = true;
     if (this.modelStatus) this.modelStatus.textContent = "Training…";
     try {
       const res = await fetch("/train", {
@@ -175,7 +183,10 @@ class InventoryApp {
       const data = await res.json();
       if (data.success) {
         this.notify(data.message || "Trained.", "success");
-        if (this.modelStatus) this.modelStatus.textContent = "Model updated.";
+        if (this.modelStatus) {
+          this.modelStatus.textContent =
+            "Model updated. You can run a prediction above.";
+        }
       } else {
         this.notify(data.error || "Training failed.", "error");
         if (this.modelStatus) this.modelStatus.textContent = "Training failed.";
@@ -186,11 +197,11 @@ class InventoryApp {
       if (this.modelStatus) this.modelStatus.textContent = "Error.";
     } finally {
       if (this.trainBtn) this.trainBtn.disabled = false;
-      if (this.homeTrainBtn) this.homeTrainBtn.disabled = false;
     }
   }
 
-  async loadDashboardData() {
+  async loadDashboardData(showToast = false) {
+    if (this.refreshKpisBtn) this.refreshKpisBtn.disabled = true;
     try {
       const res = await fetch("/api/inventory-summary");
       const data = await res.json();
@@ -200,8 +211,12 @@ class InventoryApp {
       this.setText("lowStockCount", this.fmtNum(m.low_stock_count));
       this.setText("totalRevenue", this.fmtMoney(m.total_revenue));
       this.setText("nearExpiryCount", this.fmtNum(m.near_expiry_count));
+      if (showToast) this.notify("KPIs updated.", "success");
     } catch (e) {
       console.warn("Dashboard KPI fetch failed", e);
+      if (showToast) this.notify("Could not refresh KPIs.", "error");
+    } finally {
+      if (this.refreshKpisBtn) this.refreshKpisBtn.disabled = false;
     }
   }
 

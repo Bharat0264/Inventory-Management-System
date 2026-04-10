@@ -1,4 +1,4 @@
-/* IMS — Inventory Management System (flat UI) */
+/* IMS: Inventory Management System (flat UI) */
 
 :root {
   --bg: #f4f3ef;
@@ -234,6 +234,19 @@ code {
   margin-bottom: 0.4rem;
 }
 
+.page-intro--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.page-intro--row .btn {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
 /* Panels */
 .panel {
   background: var(--surface);
@@ -253,6 +266,14 @@ code {
 
 .panel h2 {
   margin-bottom: 0.75rem;
+}
+
+.panel__subhead {
+  margin-top: 1.5rem;
+  margin-bottom: 0.65rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.125rem;
 }
 
 /* Stats */

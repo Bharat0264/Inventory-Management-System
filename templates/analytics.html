@@ -8,20 +8,16 @@
 
 <section class="stats-row">
     <div class="stat">
+        <span class="stat__value">{{ row_count }}</span>
+        <span class="stat__label">Rows in file</span>
+    </div>
+    <div class="stat">
         <span class="stat__value">${{ "%.0f"|format(total_sales) }}</span>
         <span class="stat__label">Revenue sum</span>
     </div>
     <div class="stat">
         <span class="stat__value">${{ "%.0f"|format(average_order_value) }}</span>
         <span class="stat__label">Mean row revenue</span>
-    </div>
-    <div class="stat">
-        <span class="stat__value">{{ top_selling_products|length }}</span>
-        <span class="stat__label">Top list</span>
-    </div>
-    <div class="stat">
-        <span class="stat__value">{{ bottom_selling_products|length }}</span>
-        <span class="stat__label">Bottom list</span>
     </div>
 </section>
 
@@ -37,11 +33,11 @@
     <section class="panel">
         <h2>Highest stock (5)</h2>
         {% if top_selling_products %}
-        <div class="table-wrap">
+        <div class="table-wrap table-wrap--tall">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Stock</th>
                         <th>Revenue</th>
@@ -50,7 +46,7 @@
                 <tbody>
                     {% for product in top_selling_products %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ product.product_id }}</td>
                         <td>{{ product.product_name }}</td>
                         <td>{{ product.quantity_stock }}</td>
                         <td>${{ "%.0f"|format(product.total_revenue) }}</td>
@@ -67,11 +63,11 @@
     <section class="panel">
         <h2>Lowest stock (5)</h2>
         {% if bottom_selling_products %}
-        <div class="table-wrap">
+        <div class="table-wrap table-wrap--tall">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Stock</th>
                         <th>Revenue</th>
@@ -80,7 +76,7 @@
                 <tbody>
                     {% for product in bottom_selling_products %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ product.product_id }}</td>
                         <td>{{ product.product_name }}</td>
                         <td>{{ product.quantity_stock }}</td>
                         <td>${{ "%.0f"|format(product.total_revenue) }}</td>
@@ -94,15 +90,6 @@
         {% endif %}
     </section>
 </div>
-
-<section class="panel">
-    <h2>Shortcuts</h2>
-    <div class="btn-row">
-        <a href="/inventory" class="btn btn-secondary">Inventory</a>
-        <a href="/predict" class="btn btn-secondary">Forecast</a>
-        <a href="/" class="btn btn-secondary">Upload</a>
-    </div>
-</section>
 {% endblock %}
 
 {% block scripts_extra %}
@@ -131,7 +118,7 @@
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: { legend: { display: false }, tooltip: { intersect: false, mode: 'index' } },
       scales: {
         y: { beginAtZero: true },
         x: { ticks: { maxRotation: 45, minRotation: 0 } }

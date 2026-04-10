@@ -3,20 +3,24 @@
 {% block content %}
 <section class="page-intro">
     <h1>Stock forecast</h1>
-    <p class="muted">Model: scikit-learn regressor trained on <code>quantity_stock</code> from your CSV. Enter three values (newest first).</p>
+    <p class="muted">Regressor trained on <code>quantity_stock</code> in your CSV. Enter three values, newest first.</p>
 </section>
 
 <section class="panel">
-    <h2>Model</h2>
+    <h2>Model and train</h2>
+    <p class="muted" id="modelStatus" role="status">
+        {% if model_loaded %}
+        A trained model file is loaded for predictions.
+        {% else %}
+        No trained model yet. Upload data, then train (Forecast needs enough rows in the CSV).
+        {% endif %}
+    </p>
     <div class="model-row">
-        <p id="modelStatus" class="muted" role="status">Checking…</p>
-        <button type="button" class="btn btn-primary" id="trainModelBtn" disabled>Train</button>
+        <button type="button" class="btn btn-primary" id="trainModelBtn">Train</button>
     </div>
-    <p class="muted small">Training writes to the server temp path; on serverless hosts it may not persist between cold starts.</p>
-</section>
+    <p class="muted small">On serverless hosts, trained files may not persist between cold starts.</p>
 
-<section class="panel">
-    <h2>Predict next level</h2>
+    <h2 class="panel__subhead">Predict next level</h2>
     <form id="predictionForm" class="stack">
         <div class="grid-3">
             <div class="field">
@@ -37,16 +41,7 @@
 
     <div id="predictionResult" class="prediction-result" hidden>
         <h3>Result</h3>
-        <div id="predictionValue"></div>
-    </div>
-</section>
-
-<section class="panel">
-    <h2>Shortcuts</h2>
-    <div class="btn-row">
-        <a href="/inventory" class="btn btn-secondary">Inventory</a>
-        <a href="/analytics" class="btn btn-secondary">Analytics</a>
-        <a href="/" class="btn btn-secondary">Upload</a>
+        <p class="prediction-result__line" id="predictionValue"></p>
     </div>
 </section>
 {% endblock %}

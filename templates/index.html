@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Home · {{ app_name }}{% endblock %}
 {% block content %}
-<section class="page-intro">
-    <h1>Overview</h1>
-    <p class="muted">Upload a CSV, then open inventory, analytics, or stock forecasts.</p>
+<section class="page-intro page-intro--row">
+    <div>
+        <h1>Overview</h1>
+        <p class="muted">Upload a CSV. Use the header for Inventory, Analytics, and Forecast.</p>
+    </div>
+    <button type="button" class="btn btn-secondary" id="refreshKpis">Refresh KPIs</button>
 </section>
 
 <section class="stats-row" aria-label="Summary">
     <div class="stat">
-        <span class="stat__value" id="totalProducts">—</span>
+        <span class="stat__value" id="totalProducts">…</span>
         <span class="stat__label">Products</span>
     </div>
     <div class="stat">
-        <span class="stat__value" id="lowStockCount">—</span>
+        <span class="stat__value" id="lowStockCount">…</span>
         <span class="stat__label">Low stock</span>
     </div>
     <div class="stat">
-        <span class="stat__value" id="totalRevenue">—</span>
+        <span class="stat__value" id="totalRevenue">…</span>
         <span class="stat__label">Revenue (sum)</span>
     </div>
     <div class="stat">
-        <span class="stat__value" id="nearExpiryCount">—</span>
+        <span class="stat__value" id="nearExpiryCount">…</span>
         <span class="stat__label">Near expiry</span>
     </div>
 </section>
@@ -37,35 +40,7 @@
             </div>
         </div>
         <div id="filePreview" class="file-preview" aria-live="polite"></div>
-        <button type="submit" class="btn btn-primary">Upload</button>
+        <button type="submit" class="btn btn-primary" id="uploadSubmitBtn">Upload</button>
     </form>
-</section>
-
-<section class="grid-3">
-    <div class="panel">
-        <h3>Inventory</h3>
-        <p class="muted">Restock and expiry lists from your file.</p>
-        <a href="/inventory" class="btn btn-secondary">Open</a>
-    </div>
-    <div class="panel">
-        <h3>Analytics</h3>
-        <p class="muted">Revenue by row and simple rankings.</p>
-        <a href="/analytics" class="btn btn-secondary">Open</a>
-    </div>
-    <div class="panel">
-        <h3>Forecast</h3>
-        <p class="muted">Trained regressor on three recent stock values.</p>
-        <a href="/predict" class="btn btn-secondary">Open</a>
-    </div>
-</section>
-
-<section class="panel">
-    <h2>Shortcuts</h2>
-    <div class="btn-row">
-        <a href="/inventory" class="btn btn-secondary">Inventory</a>
-        <a href="/analytics" class="btn btn-secondary">Analytics</a>
-        <a href="/predict" class="btn btn-secondary">Forecast</a>
-        <button type="button" class="btn btn-primary" id="homeTrainBtn">Train model</button>
-    </div>
 </section>
 {% endblock %}

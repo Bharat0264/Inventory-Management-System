@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ app_full_name }} ({{ app_name }}) — CSV inventory, analytics, and stock forecasts.">
+    <meta name="description" content="{{ app_full_name }} ({{ app_name }}): CSV inventory, analytics, and stock forecasts.">
     <title>{% block title %}{{ app_name }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
     <a href="#main" class="skip-link">Skip to content</a>
     <header class="site-header">
         <div class="site-header__inner">
-            <a href="/" class="site-brand" aria-label="{{ app_full_name }} — home">
+            <a href="/" class="site-brand" aria-label="{{ app_full_name }}, home">
                 <span class="site-brand__mark">{{ app_name }}</span>
                 <span class="site-brand__full">{{ app_full_name }}</span>
             </a>
@@ -36,7 +36,7 @@
 
     <footer class="site-footer">
         <div class="site-footer__inner">
-            <p><strong>{{ app_name }}</strong> — {{ app_full_name }}</p>
+            <p><strong>{{ app_name }}</strong>: {{ app_full_name }}</p>
             <p class="site-footer__tag">CSV in, clarity out.</p>
         </div>
     </footer>
