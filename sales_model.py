@@ -1,3 +1,4 @@
+# Standalone experiment script — not imported by the Flask app (uses statsmodels; optional deps).
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -5,7 +6,7 @@ from statsmodels.tsa.arima.model import ARIMA
 import warnings
 import pickle
 
-# Replace "data.csv" with the actual path to your data filejn
+# Replace with your CSV path.
 data = pd.read_csv("Inventory-Management-System-main/data_set/data.csv")
 
 try:

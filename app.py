@@ -14,7 +14,15 @@ from sklearn.preprocessing import MinMaxScaler
 from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, PLOT_DIR, STATIC_DIR
 from utils import generate_inventory_report, get_low_stock_products, get_near_expiry_products
 
+APP_NAME = os.environ.get("APP_NAME", "Stockdesk")
+
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
+
+
+def page(template: str, *, nav_active: str = "", **kwargs):
+    """Render HTML with shared layout context."""
+    ctx = {"app_name": APP_NAME, "nav_active": nav_active, **kwargs}
+    return render_template(template, **ctx)
 
 # Configuration (paths.py uses /tmp on Vercel for uploads and model I/O)
 app.config["UPLOAD_FOLDER"] = DATA_SET_DIR
@@ -60,7 +68,7 @@ model = load_trained_model()
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return page("index.html", nav_active="home")
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -107,9 +115,12 @@ def inventory():
     try:
         # Check if data file exists
         if not os.path.exists(app.config['DATA_PATH']):
-            return render_template('error.html', 
-                                 error="Data file not found. Please upload a CSV file first.")
-        
+            return page(
+                "error.html",
+                nav_active="",
+                error="No data file. Upload a CSV from Home first.",
+            )
+
         # Read data from CSV file
         df = pd.read_csv(app.config['DATA_PATH'])
         
@@ -121,12 +132,15 @@ def inventory():
         from utils import calculate_inventory_metrics
         metrics = calculate_inventory_metrics(df)
         
-        return render_template('inventory.html', 
-                             restock_recommendations=low_stock_recommendations,
-                             near_expiry_recommendations=near_expiry_recommendations,
-                             metrics=metrics)
+        return page(
+            "inventory.html",
+            nav_active="inventory",
+            restock_recommendations=low_stock_recommendations,
+            near_expiry_recommendations=near_expiry_recommendations,
+            metrics=metrics,
+        )
     except Exception as e:
-        return render_template('error.html', error=f"Error loading inventory: {str(e)}")
+        return page("error.html", nav_active="", error=f"Inventory error: {str(e)}")
 
 @app.route('/predict', methods=["GET", "POST"])
 def predict():
@@ -194,7 +208,7 @@ def predict():
             }), 500
 
     elif request.method == "GET":
-        return render_template("prediction.html")
+        return page("prediction.html", nav_active="predict")
 
 @app.route('/analytics')
 def sales_analytics():
@@ -202,9 +216,12 @@ def sales_analytics():
     try:
         # Check if data file exists
         if not os.path.exists(app.config['DATA_PATH']):
-            return render_template('error.html', 
-                                 error="Data file not found. Please upload a CSV file first.")
-        
+            return page(
+                "error.html",
+                nav_active="",
+                error="No data file. Upload a CSV from Home first.",
+            )
+
         # Load data from CSV file
         data = pd.read_csv(app.config['DATA_PATH'])
         
@@ -255,14 +272,22 @@ def sales_analytics():
         except Exception as e:
             print(f"Error creating sales trend plot: {e}")
 
-        return render_template('analytics.html', 
-                             total_sales=total_sales,
-                             average_order_value=average_order_value,
-                             top_selling_products=top_selling_dict,
-                             bottom_selling_products=bottom_selling_dict)
+        chart_labels = [str(x) for x in data["product_id"].tolist()]
+        chart_revenue = [float(x) for x in data["total_revenue"].tolist()]
+
+        return page(
+            "analytics.html",
+            nav_active="analytics",
+            total_sales=total_sales,
+            average_order_value=average_order_value,
+            top_selling_products=top_selling_dict,
+            bottom_selling_products=bottom_selling_dict,
+            chart_labels=chart_labels,
+            chart_revenue=chart_revenue,
+        )
     except Exception as e:
         print(f"Analytics error: {str(e)}")
-        return render_template('error.html', error=f"Error loading analytics: {str(e)}")
+        return page("error.html", nav_active="", error=f"Analytics error: {str(e)}")
 
 @app.route('/train', methods=['POST'])
 def train_model():

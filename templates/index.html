@@ -1,175 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System - Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="/" class="navbar-brand">
-                <i class="fas fa-boxes"></i>
-                IMS Dashboard
-            </a>
-            <ul class="navbar-nav">
-                <li><a href="/" class="nav-link active">Home</a></li>
-                <li><a href="/inventory" class="nav-link">Inventory</a></li>
-                <li><a href="/analytics" class="nav-link">Analytics</a></li>
-                <li><a href="/predict" class="nav-link">Predictions</a></li>
-            </ul>
-        </div>
-    </nav>
+{% extends "base.html" %}
+{% block title %}Home · {{ app_name }}{% endblock %}
+{% block content %}
+<section class="page-intro">
+    <h1>Overview</h1>
+    <p class="muted">Upload a CSV, then open inventory, analytics, or stock forecasts.</p>
+</section>
 
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Hero Section -->
-        <div class="card text-center mb-6">
-            <div class="card-header">
-                <h1 class="card-title">
-                    <i class="fas fa-chart-line text-primary"></i>
-                    Welcome to Inventory Management System
-                </h1>
-                <p class="card-subtitle">
-                    Streamline your inventory operations with AI-powered insights and predictive analytics
-                </p>
-            </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="grid grid-4 mb-6">
-            <div class="stats-card">
-                <div class="stats-number" id="totalProducts">-</div>
-                <div class="stats-label">Total Products</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-number" id="lowStockCount">-</div>
-                <div class="stats-label">Low Stock Items</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-number" id="totalRevenue">-</div>
-                <div class="stats-label">Total Revenue</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-number" id="nearExpiryCount">-</div>
-                <div class="stats-label">Near Expiry</div>
-            </div>
-        </div>
-
-        <!-- File Upload Section -->
-        <div class="card mb-6">
-            <div class="card-header">
-                <h2 class="card-title">
-                    <i class="fas fa-upload"></i>
-                    Upload Inventory Data
-                </h2>
-                <p class="card-subtitle">
-                    Upload your CSV file to get started with inventory management and analytics
-                </p>
-            </div>
-            
-            <form id="uploadForm" enctype="multipart/form-data" class="mb-4">
-                <div class="form-group">
-                    <label for="fileInput" class="form-label">Select CSV File</label>
-                    <div class="file-upload">
-                        <input type="file" name="file" id="fileInput" accept=".csv" required>
-                        <label for="fileInput" class="file-upload-label">
-                            <div>
-                                <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: var(--primary-color);"></i>
-                                <h3>Choose a file or drag it here</h3>
-                                <p>Supports CSV files with inventory data</p>
-                                <small>Click to browse or drag and drop</small>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                
-                <div id="filePreview"></div>
-                
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="fas fa-upload"></i>
-                    Upload Data
-                </button>
-            </form>
-        </div>
-
-        <!-- Features Grid -->
-        <div class="grid grid-3 mb-6">
-            <div class="card text-center">
-                <div class="card-header">
-                    <i class="fas fa-boxes fa-3x text-primary mb-3"></i>
-                    <h3 class="card-title">Inventory Management</h3>
-                    <p class="card-subtitle">Track stock levels, monitor expiry dates, and manage product information efficiently</p>
-                </div>
-                <a href="/inventory" class="btn btn-outline">
-                    <i class="fas fa-arrow-right"></i>
-                    View Inventory
-                </a>
-            </div>
-            
-            <div class="card text-center">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
-                    <h3 class="card-title">Sales Analytics</h3>
-                    <p class="card-subtitle">Analyze sales trends, identify top-performing products, and generate insights</p>
-                </div>
-                <a href="/analytics" class="btn btn-outline">
-                    <i class="fas fa-arrow-right"></i>
-                    View Analytics
-                </a>
-            </div>
-            
-            <div class="card text-center">
-                <div class="card-header">
-                    <i class="fas fa-brain fa-3x text-primary mb-3"></i>
-                    <h3 class="card-title">AI Predictions</h3>
-                    <p class="card-subtitle">Use machine learning to predict sales and optimize inventory levels</p>
-                </div>
-                <a href="/predict" class="btn btn-outline">
-                    <i class="fas fa-arrow-right"></i>
-                    Make Predictions
-                </a>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">
-                    <i class="fas fa-bolt"></i>
-                    Quick Actions
-                </h2>
-                <p class="card-subtitle">
-                    Access frequently used features and tools
-                </p>
-            </div>
-            
-            <div class="grid grid-4">
-                <a href="/inventory" class="btn btn-primary">
-                    <i class="fas fa-list"></i>
-                    View Inventory
-                </a>
-                <a href="/analytics" class="btn btn-success">
-                    <i class="fas fa-chart-line"></i>
-                    Sales Analytics
-                </a>
-                <a href="/predict" class="btn btn-warning">
-                    <i class="fas fa-calculator"></i>
-                    Predictions
-                </a>
-                <button onclick="window.IMSApp.trainModel()" class="btn btn-info">
-                    <i class="fas fa-cog"></i>
-                    Train Model
-                </button>
-            </div>
-        </div>
+<section class="stats-row" aria-label="Summary">
+    <div class="stat">
+        <span class="stat__value" id="totalProducts">—</span>
+        <span class="stat__label">Products</span>
     </div>
+    <div class="stat">
+        <span class="stat__value" id="lowStockCount">—</span>
+        <span class="stat__label">Low stock</span>
+    </div>
+    <div class="stat">
+        <span class="stat__value" id="totalRevenue">—</span>
+        <span class="stat__label">Revenue (sum)</span>
+    </div>
+    <div class="stat">
+        <span class="stat__value" id="nearExpiryCount">—</span>
+        <span class="stat__label">Near expiry</span>
+    </div>
+</section>
 
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
-</html>
+<section class="panel">
+    <h2>Upload CSV</h2>
+    <p class="muted">Expected columns include product id, name, quantity, revenue, and expiry.</p>
+    <form id="uploadForm" enctype="multipart/form-data" class="stack">
+        <div class="field">
+            <label for="fileInput">File</label>
+            <div class="dropzone" id="uploadDropzone">
+                <input type="file" name="file" id="fileInput" accept=".csv" required class="dropzone__input">
+                <span class="dropzone__label">Choose a file or drop it here</span>
+            </div>
+        </div>
+        <div id="filePreview" class="file-preview" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</section>
+
+<section class="grid-3">
+    <div class="panel">
+        <h3>Inventory</h3>
+        <p class="muted">Restock and expiry lists from your file.</p>
+        <a href="/inventory" class="btn btn-secondary">Open</a>
+    </div>
+    <div class="panel">
+        <h3>Analytics</h3>
+        <p class="muted">Revenue by row and simple rankings.</p>
+        <a href="/analytics" class="btn btn-secondary">Open</a>
+    </div>
+    <div class="panel">
+        <h3>Forecast</h3>
+        <p class="muted">Trained regressor on three recent stock values.</p>
+        <a href="/predict" class="btn btn-secondary">Open</a>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Shortcuts</h2>
+    <div class="btn-row">
+        <a href="/inventory" class="btn btn-secondary">Inventory</a>
+        <a href="/analytics" class="btn btn-secondary">Analytics</a>
+        <a href="/predict" class="btn btn-secondary">Forecast</a>
+        <button type="button" class="btn btn-primary" id="homeTrainBtn">Train model</button>
+    </div>
+</section>
+{% endblock %}
