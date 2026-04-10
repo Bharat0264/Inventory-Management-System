@@ -1,6 +1,5 @@
 import os
 import pickle
-import warnings
 
 import matplotlib
 
@@ -14,10 +13,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, PLOT_DIR, STATIC_DIR
 from utils import generate_inventory_report, get_low_stock_products, get_near_expiry_products
-
-# Suppress TensorFlow warnings
-warnings.filterwarnings('ignore', category=UserWarning)
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
 
