@@ -1,19 +1,24 @@
+import os
 import pickle
+
+import matplotlib
+
+matplotlib.use("agg")  # Force non-interactive backend
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use('agg')  # Force non-interactive backend
-import matplotlib.pyplot as plt
-import os
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+from paths import DATA_PATH, MODEL_PATH, PLOT_DIR
+
+
 def load_and_preprocess_data():
     """Load and preprocess the data"""
     try:
-        data_path = 'data_set/data.csv'
+        data_path = DATA_PATH
         if not os.path.exists(data_path):
             raise FileNotFoundError(f"Data file not found at {data_path}")
         
@@ -127,8 +132,10 @@ def evaluate_model(model, X_train, y_train, X_test, y_test, scaler):
         print(f"Error evaluating model: {str(e)}")
         return None, None, None, None
 
-def save_model(model, scaler, filepath='trained_model.pkl'):
+def save_model(model, scaler, filepath=None):
     """Save the trained model and scaler"""
+    if filepath is None:
+        filepath = MODEL_PATH
     try:
         model_data = {
             'model': model,
@@ -165,9 +172,9 @@ def create_visualization(df, train_predict, test_predict, y_train_inv, y_test_in
         plt.legend()
         plt.grid(True, alpha=0.3)
         
-        # Save the plot
-        plot_path = 'static/sales_prediction_plot.png'
-        plt.savefig(plot_path, dpi=300, bbox_inches='tight', facecolor='white')
+        # Save the plot (writable dir on Vercel)
+        plot_path = os.path.join(PLOT_DIR, "sales_prediction_plot.png")
+        plt.savefig(plot_path, dpi=300, bbox_inches="tight", facecolor="white")
         plt.close()
         
         print(f"Visualization saved to {plot_path}")

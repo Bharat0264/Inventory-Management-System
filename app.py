@@ -1,28 +1,30 @@
-from flask import Flask, request, render_template, jsonify
-import pandas as pd
-import numpy as np
-import pickle
-import matplotlib.pyplot as plt
 import os
+import pickle
 import warnings
-from sklearn.preprocessing import MinMaxScaler
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from flask import Flask, request, render_template, jsonify
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.preprocessing import MinMaxScaler
+
+from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, PLOT_DIR, STATIC_DIR
 from utils import generate_inventory_report, get_low_stock_products, get_near_expiry_products
 
 # Suppress TensorFlow warnings
 warnings.filterwarnings('ignore', category=UserWarning)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
 
-# Configuration
-app.config['UPLOAD_FOLDER'] = 'data_set'
-app.config['MODEL_PATH'] = 'trained_model.pkl'
-app.config['DATA_PATH'] = 'data_set/data.csv'
-
-# Ensure directories exist
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-os.makedirs('static', exist_ok=True)
+# Configuration (paths.py uses /tmp on Vercel for uploads and model I/O)
+app.config["UPLOAD_FOLDER"] = DATA_SET_DIR
+app.config["MODEL_PATH"] = MODEL_PATH
+app.config["DATA_PATH"] = DATA_PATH
 
 # Load the pickled model
 def load_trained_model():
@@ -251,9 +253,9 @@ def sales_analytics():
             fig.patch.set_facecolor('white')
             fig.tight_layout()
 
-            # Save the plot to a static file
-            sales_trend_file_path = "static/sales_trend.png"
-            fig.savefig(sales_trend_file_path, dpi=300, bbox_inches='tight', facecolor='white')
+            # Save chart to writable runtime dir (serverless has no persistent project disk)
+            sales_trend_file_path = os.path.join(PLOT_DIR, "sales_trend.png")
+            fig.savefig(sales_trend_file_path, dpi=300, bbox_inches="tight", facecolor="white")
             plt.close()
         except Exception as e:
             print(f"Error creating sales trend plot: {e}")
