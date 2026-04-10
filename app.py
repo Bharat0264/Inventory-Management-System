@@ -14,14 +14,21 @@ from sklearn.preprocessing import MinMaxScaler
 from paths import DATA_PATH, DATA_SET_DIR, MODEL_PATH, PLOT_DIR, STATIC_DIR
 from utils import generate_inventory_report, get_low_stock_products, get_near_expiry_products
 
-APP_NAME = os.environ.get("APP_NAME", "Stockdesk")
+# Short header label and full product name (override with APP_NAME / APP_FULL_NAME).
+APP_NAME = os.environ.get("APP_NAME", "IMS")
+APP_FULL_NAME = os.environ.get("APP_FULL_NAME", "Inventory Management System")
 
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/static")
 
 
 def page(template: str, *, nav_active: str = "", **kwargs):
     """Render HTML with shared layout context."""
-    ctx = {"app_name": APP_NAME, "nav_active": nav_active, **kwargs}
+    ctx = {
+        "app_name": APP_NAME,
+        "app_full_name": APP_FULL_NAME,
+        "nav_active": nav_active,
+        **kwargs,
+    }
     return render_template(template, **ctx)
 
 # Configuration (paths.py uses /tmp on Vercel for uploads and model I/O)

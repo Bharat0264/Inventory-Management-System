@@ -1,5 +1,5 @@
 /**
- * Stockdesk UI — upload, dashboard KPIs, forecast, train.
+ * IMS — Inventory Management System — upload, dashboard KPIs, forecast, train.
  */
 
 class InventoryApp {
