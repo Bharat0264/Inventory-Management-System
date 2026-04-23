@@ -6,10 +6,6 @@ IMS is a Flask app that turns a boring CSV into something you can actually use �
 
 No login circus. No enterprise sales deck. Upload a file, poke around, train a model when you feel brave.
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-2.x-black?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-
 ---
 
 ## Why bother?
@@ -48,13 +44,16 @@ Open **http://127.0.0.1:5000** and feed it `data_set/data.csv` — or your own f
 ---
 
 ## Project map
-Inventory-Management-System/
-├── app.py              ← Routes, JSON API, your new best friend
-├── paths.py            ← "Am I on a laptop or a postage-stamp server?"
-├── Prediction.py       ← Training pipeline for the forecast
-├── public/static/      ← CSS + JS (Vercel-friendly public/)
-├── templates/          ← Jinja2 + base.html layout
-└── data_set/data.csv   ← Sample loot for testing
+
+| Path | Purpose |
+|---|---|
+| `app.py` | Routes, JSON API, your new best friend |
+| `paths.py` | "Am I on a laptop or a postage-stamp server?" |
+| `Prediction.py` | Training pipeline for the forecast |
+| `public/static/` | CSS + JS (Vercel-friendly `public/`) |
+| `templates/` | Jinja2 + `base.html` layout |
+| `data_set/data.csv` | Sample loot for testing |
+
 ---
 
 ## Configuration
