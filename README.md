@@ -2,7 +2,7 @@
 
 **You have a spreadsheet. We have opinions about it.**
 
-IMS is a Flask app that turns a boring CSV into something you can actually use — who's low on stock, what's about to expire, revenue by row, and a forecast trained on *your* numbers, not a demo file from 2019.
+IMS is a Flask app that turns a boring CSV into something you can actually use: who's low on stock, what's about to expire, revenue by row, and a forecast trained on *your* numbers, not a demo file from 2019.
 
 No login circus. No enterprise sales deck. Upload a file, poke around, train a model when you feel brave.
 
@@ -10,14 +10,14 @@ No login circus. No enterprise sales deck. Upload a file, poke around, train a m
 
 ## Why bother?
 
-Because *"I'll check the inventory later"* is how shelves go empty and yogurt goes bad.
+Because *"I'll check the inventory later"* is how shelves go empty and yogurt goes bad. IMS fixes that.
 
 | Feature | What it actually does |
 |---|---|
 | 🏠 **Home** | KPIs at a glance + drag-and-drop CSV upload |
 | 📦 **Inventory** | Restock nudges and expiry radar |
 | 📊 **Analytics** | Revenue by row, top/bottom movers, Chart.js from your real data |
-| 🔮 **Forecast** | Three recent stock levels in → one estimate out (scikit-learn) |
+| 🔮 **Forecast** | Three recent stock levels in, one estimate out (scikit-learn) |
 
 Ships locally or on Vercel. Paths adapt automatically when `VERCEL` is set.
 
@@ -34,7 +34,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open **http://127.0.0.1:5000** and feed it `data_set/data.csv` — or your own file with the same column shape.
+Open **http://127.0.0.1:5000** and feed it `data_set/data.csv`, or your own file with the same column shape.
 
 > **Want forecasting?** Pull in the ML extras:
 > ```bash
@@ -58,7 +58,7 @@ Open **http://127.0.0.1:5000** and feed it `data_set/data.csv` — or your own f
 
 ## Configuration
 
-Tweak behavior with environment variables — no config files, no drama.
+Tweak behavior with environment variables. No config files, no drama.
 
 | Variable | Default | What it does |
 |---|---|---|
@@ -70,19 +70,19 @@ Tweak behavior with environment variables — no config files, no drama.
 
 ## Deploying
 
-**Locally** — the quick start above is all you need.
+**Locally** -- the quick start above is all you need.
 
-**Vercel** — set the `VERCEL` environment variable in your project settings and push. The app detects it and reroutes file I/O to `/tmp` automatically.
+**Vercel** -- set the `VERCEL` environment variable in your project settings and push. The app detects it and reroutes file I/O to `/tmp` automatically.
 
 ---
 
 ## Contributing
 
-PRs and issues are welcome. A few ground rules before you dive in:
+PRs and issues are welcome! A few ground rules before you dive in:
 
-1. **Fork + branch from `main`** with a name that hints at the change — `fix/upload-timeout`, `feat/dark-mode`, that kind of thing.
+1. **Fork + branch from `main`** with a name that hints at the change: `fix/upload-timeout`, `feat/dark-mode`, you get the idea.
 2. **Keep scope tight.** One logical change per PR beats a kitchen-sink diff every time.
-3. **Smoke-test your touches** — upload flow, inventory table, analytics chart, forecast + train.
+3. **Smoke-test your touches** -- upload flow, inventory table, analytics chart, forecast + train.
 4. **Describe what *and* why** in the PR body. Reviewers should nod, not squint.
 
 Filing a bug? Include your OS, Python version, and what you clicked before the world ended.
@@ -91,9 +91,9 @@ Filing a bug? Include your OS, Python version, and what you clicked before the w
 
 ## License
 
-Released under the **MIT License** — use it, break it, fix it, ship it. Just keep the copyright notice and license text with your copies.
+Released under the **MIT License** -- use it, break it, fix it, ship it. Just keep the copyright notice and license text with your copies.
 
-Full legalese in [LICENSE](LICENSE). Copyright © 2024 Jonathan Thota.
+Full legalese in [LICENSE](LICENSE). Copyright (c) 2024 Jonathan Thota.
 
 ---
 
