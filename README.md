@@ -76,16 +76,4 @@ Tweak behavior with environment variables. No config files, no drama.
 
 ---
 
-## Contributing
-
-PRs and issues are welcome! A few ground rules before you dive in:
-
-1. **Fork + branch from `main`** with a name that hints at the change: `fix/upload-timeout`, `feat/dark-mode`, you get the idea.
-2. **Keep scope tight.** One logical change per PR beats a kitchen-sink diff every time.
-3. **Smoke-test your touches** -- upload flow, inventory table, analytics chart, forecast + train.
-4. **Describe what *and* why** in the PR body. Reviewers should nod, not squint.
-
-Filing a bug? Include your OS, Python version, and what you clicked before the world ended.
-
----
 
