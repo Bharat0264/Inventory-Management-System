@@ -26,7 +26,7 @@ Ships locally or on Vercel. Paths adapt automatically when `VERCEL` is set.
 ## Quick start
 
 ```bash
-git clone https://github.com/jonathanrao99/Inventory-Management-System
+git clone https://github.com/Bharat0264/Inventory-Management-System
 cd Inventory-Management-System
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
@@ -93,17 +93,17 @@ Filing a bug? Include your OS, Python version, and what you clicked before the w
 
 Released under the **MIT License** -- use it, break it, fix it, ship it. Just keep the copyright notice and license text with your copies.
 
-Full legalese in [LICENSE](LICENSE). Copyright (c) 2024 Jonathan Thota.
+Full legalese in [LICENSE](LICENSE).
 
 ---
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=jonathanrao99%2FInventory-Management-System&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=Bharat0264%2FInventory-Management-System&type=date&legend=top-left">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=jonathanrao99/Inventory-Management-System&type=date&theme=dark&legend=top-left" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=jonathanrao99/Inventory-Management-System&type=date&legend=top-left" />
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=jonathanrao99/Inventory-Management-System&type=date&legend=top-left" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Bharat0264/Inventory-Management-System&type=date&theme=dark&legend=top-left" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Bharat0264/Inventory-Management-System&type=date&legend=top-left" />
+    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Bharat0264/Inventory-Management-System&type=date&legend=top-left" />
   </picture>
 </a>
 
